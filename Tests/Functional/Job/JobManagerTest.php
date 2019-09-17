@@ -58,8 +58,8 @@ class JobManagerTest extends FunctionalTestCase
         parent::setUp();
         $this->mockQueueManager = $this->getMockBuilder(QueueManager::class)->disableOriginalConstructor()->getMock();
         $this->testQueue = new TestQueue('TestQueue');
-        $this->mockQueueManager->expects($this->any())->method('getQueue')->with('TestQueue')->will($this->returnValue($this->testQueue));
-        $this->mockQueueManager->expects($this->any())->method('getQueueSettings')->with('TestQueue')->will($this->returnCallback(function() { return $this->queueSettings; }));
+        $this->mockQueueManager->expects(self::any())->method('getQueue')->with('TestQueue')->will(self::returnValue($this->testQueue));
+        $this->mockQueueManager->expects(self::any())->method('getQueueSettings')->with('TestQueue')->will(self::returnCallback(function() { return $this->queueSettings; }));
 
         $this->jobManager = new JobManager();
         $this->inject($this->jobManager, 'queueManager', $this->mockQueueManager);
@@ -72,7 +72,7 @@ class JobManagerTest extends FunctionalTestCase
         self::$bootstrap->getSignalSlotDispatcher()->connect(JobManager::class, 'messageFailed', $this, 'logSignal');
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->emittedSignals = [];

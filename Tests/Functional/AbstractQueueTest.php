@@ -36,19 +36,22 @@ abstract class AbstractQueueTest extends FunctionalTestCase
     public function setUp(): void
     {
         parent::setUp();
+
         $configurationManager = $this->objectManager->get(ConfigurationManager::class);
         $packageKey = $this->objectManager->getPackageKeyByObjectName(TypeHandling::getTypeForValue($this));
         $packageSettings = $configurationManager->getConfiguration(ConfigurationManager::CONFIGURATION_TYPE_SETTINGS, $packageKey);
+
         if (!isset($packageSettings['testing']['enabled']) || $packageSettings['testing']['enabled'] !== true) {
-            $this->markTestSkipped(sprintf('Queue is not configured (%s.testing.enabled != TRUE)', $packageKey));
+            static::markTestSkipped(sprintf('Queue is not configured (%s.testing.enabled != TRUE)', $packageKey));
         }
+
         $this->queueSettings = $packageSettings['testing'];
         $this->queue = $this->getQueue();
         $this->queue->setUp();
         $this->queue->flush();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
         $this->queue->flush();
@@ -65,7 +68,7 @@ abstract class AbstractQueueTest extends FunctionalTestCase
     public function submitReturnsMessageId()
     {
         $messageId = $this->queue->submit('some message payload');
-        self::assertInternalType('string', $messageId);
+        self::assertIsString($messageId);
     }
 
     /**

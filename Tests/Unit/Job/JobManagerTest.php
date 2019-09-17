@@ -44,7 +44,7 @@ class JobManagerTest extends UnitTestCase
     {
         $this->mockQueueManager = $this->getMockBuilder(QueueManager::class)->disableOriginalConstructor()->getMock();
         $this->testQueue = new TestQueue('TestQueue');
-        $this->mockQueueManager->expects($this->any())->method('getQueue')->with('TestQueue')->will(self::returnValue($this->testQueue));
+        $this->mockQueueManager->expects(self::any())->method('getQueue')->with('TestQueue')->will(self::returnValue($this->testQueue));
 
         $this->jobManager = new JobManager();
         $this->inject($this->jobManager, 'queueManager', $this->mockQueueManager);
